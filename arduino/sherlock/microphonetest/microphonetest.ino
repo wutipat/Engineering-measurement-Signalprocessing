@@ -4,7 +4,7 @@ int soundSensor3 = A2;
 int soundSensor4 = A3;
 
 void setup() {
-  Serial.begin(230400);
+  Serial.begin(115200);
 }
 
 void loop() {
