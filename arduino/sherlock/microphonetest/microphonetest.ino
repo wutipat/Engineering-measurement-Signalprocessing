@@ -18,5 +18,9 @@ void loop() {
   Serial.print(",");
   Serial.print(SensorData3);
   Serial.print(",");
-  Serial.println(SensorData4);
+  Serial.print(SensorData4);
+  Serial.print(",");
+  Serial.print(0);
+  Serial.print(",");
+  Serial.println(1024);
 }
