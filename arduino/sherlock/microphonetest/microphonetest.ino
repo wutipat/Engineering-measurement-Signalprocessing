@@ -2,12 +2,17 @@ int soundSensor1 = A0;
 int soundSensor2 = A1;
 int soundSensor3 = A2;
 int soundSensor4 = A3;
+unsigned long lastTime = 0;
 
 void setup() {
   Serial.begin(115200);
 }
 
 void loop() {
+  unsigned long currentTime = micros();
+  Serial.print("Interval: ");
+  Serial.println(currentTime - lastTime); // This shows the microseconds since the last loop
+  lastTime = currentTime;
   int SensorData1 = analogRead(soundSensor1);
   int SensorData2 = analogRead(soundSensor2);
   int SensorData3 = analogRead(soundSensor3);
