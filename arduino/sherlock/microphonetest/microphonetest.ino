@@ -1,26 +1,38 @@
-int soundSensor1 = A0;
-int soundSensor2 = A1;
-int soundSensor3 = A2;
-int soundSensor4 = A3;
+// Wires: Pin A -> D2, Pin B -> D3
+const int pinA = 2; 
+const int pinB = 3;
+
+volatile long pulseCount = 0; 
 
 void setup() {
-  Serial.begin(115200);
+  pinMode(pinA, INPUT_PULLUP);
+  pinMode(pinB, INPUT_PULLUP);
+  
+  Serial.begin(115200); 
+
+  // Trigger ONLY on RISING edge of Pin A to get 1:1 pulse count
+  attachInterrupt(digitalPinToInterrupt(pinA), handlePulse, RISING);
+  
+  Serial.println("Reading 600 Pulses Per Revolution...");
 }
 
 void loop() {
-  int SensorData1 = analogRead(soundSensor1);
-  int SensorData2 = analogRead(soundSensor2);
-  int SensorData3 = analogRead(soundSensor3);
-  int SensorData4 = analogRead(soundSensor4);
-  Serial.print(SensorData1);
-  Serial.print(",");
-  Serial.print(SensorData2);
-  Serial.print(",");
-  Serial.print(SensorData3);
-  Serial.print(",");
-  Serial.print(SensorData4);
-  Serial.print(",");
-  Serial.print(0);
-  Serial.print(",");
-  Serial.println(1024);
+  static long lastPrintedPulses = 0;
+  
+  if (pulseCount != lastPrintedPulses) {
+    Serial.print("Pulses: ");
+    Serial.println(pulseCount);
+    
+    lastPrintedPulses = pulseCount;
+  }
+}
+
+// Simple ISR to count pulses and determine direction
+void handlePulse() {
+  // Check Pin B when Pin A rises to determine direction
+  if (digitalRead(pinB) == LOW) {
+    pulseCount++;
+  } else {
+    pulseCount--;
+  }
 }
